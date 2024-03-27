@@ -28,35 +28,100 @@ Node * createNode(void * data) {
     return new;
 }
 
-List * createList() {
-     return NULL;
+List * createList()
+{
+    List * new = (List *)malloc(sizeof(List));
+    assert(new != NULL);
+    new->head = new->tail = new->current = NULL;
+    return new;
 }
 
-void * firstList(List * list) {
-    return NULL;
+void * firstList(List * list) 
+{
+    if (list == NULL || list->head == NULL)
+    {
+        return NULL;
+    }
+    list->current = list->head;
+    return (void *)list->current->data;  
 }
 
-void * nextList(List * list) {
-    return NULL;
+void * nextList(List * list) 
+{
+    if (list == NULL || list->head == NULL || list->current == NULL || list->current->next == NULL)
+    {
+        return NULL;
+    }
+    list->current = list->current->next;
+    return (void *)list->current->data;
 }
 
-void * lastList(List * list) {
-    return NULL;
+void * lastList(List * list) 
+{
+    if (list == NULL || list->head == NULL)
+    {
+        return NULL;
+    }
+    list->current = list->tail;
+    return (void *)list->current->data;
 }
 
 void * prevList(List * list) {
     return NULL;
 }
 
-void pushFront(List * list, void * data) {
+void pushFront(List * list, void * data) 
+{
+    if (list == NULL)
+    {
+        return;
+    }
+    Node * new = createNode(data);
+    if (list->head == NULL)
+    {
+        list->head = list->tail = new;
+      
+    }
+    else
+    {
+        new->next = list->head;
+        list->head->prev = new;
+        list->head = new;
+    }
+  
 }
 
-void pushBack(List * list, void * data) {
+void pushBack(List * list, void * data) 
+{
     list->current = list->tail;
     pushCurrent(list,data);
 }
 
-void pushCurrent(List * list, void * data) {
+void pushCurrent(List * list, void * data) 
+{
+    if (list == NULL)
+    {
+        return;
+    }
+    Node * new = createNode(data);
+    if (list->current == NULL)
+    {
+        list->head = list->tail = new;
+    }
+    else
+    {
+        new->next = list->current->next;
+        new->prev = list->current;
+        if (list->current->next == NULL)
+        {
+            list->tail = new;
+        }
+        else
+        {
+            list->current->next->prev = new;
+        }
+    }
+    list->current->next = new;
 }
 
 void * popFront(List * list) {
